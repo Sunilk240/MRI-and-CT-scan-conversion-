@@ -1,5 +1,7 @@
-High-Resolution VAE-GAN for Cross-Modality Medical Image Synthesis
-Overview
+**High-Resolution VAE-GAN for Cross-Modality Medical Image Synthesis**
+
+**Overview**
+
 This project implements a high-resolution VAE-CycleGAN model designed for cross-modality medical image synthesis — specifically translating between MRI and CT brain scans. It tackles the common challenge of epistemic uncertainty due to small medical datasets by embedding probabilistic modeling in the latent space.
 
 Key Features
