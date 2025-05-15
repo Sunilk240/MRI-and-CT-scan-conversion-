@@ -1,95 +1,128 @@
-**High-Resolution VAE-GAN for Cross-Modality Medical Image Synthesis**
+# High-Resolution VAE-GAN for Medical Image Translation
 
+This project implements a VAE-GAN (Variational Autoencoder - Generative Adversarial Network) model for translating between MRI and CT scan images, with additional super-resolution capabilities. The model can generate high-quality CT scans from MRI images and vice versa, while maintaining important medical features.
 
-**Overview**
+---
 
-This project implements a high-resolution VAE-CycleGAN model designed for cross-modality medical image synthesis — specifically translating between MRI and CT brain scans. It tackles the common challenge of epistemic uncertainty due to small medical datasets by embedding probabilistic modeling in the latent space.
+## Abstract
 
+The study focuses on generating CT images from MRI images using unsupervised learning with VAE-CycleGAN. Due to the limited number of samples in the dataset, probabilistic models were employed to form the latent space. The model achieves good results when transitioning from MRI to CT images and acceptable results for the reverse direction.
 
-**Key Features**
+---
 
-VAE-CycleGAN Architecture
+## Key Features
 
-Combines the generative strength of Variational Autoencoder (VAE) with the domain translation ability of CycleGAN.
+- Bidirectional translation between MRI and CT scan images
+- Probabilistic latent space modeling using VAE
+- Multi-scale discriminator architecture
+- Data augmentation for improved training
+- Super-resolution capabilities using RRDB-Net
+- Comprehensive evaluation metrics (PSNR, SSIM, AUC-ROC, F1-Score)
 
+---
 
-Probabilistic Latent Space
+## Model Architecture
 
-Utilizes reparameterization to model uncertainty and improve performance on small datasets.
+### Generator (U-Net)
+- Encoder-decoder architecture with skip connections
+- VAE integration for probabilistic latent space
+- Group normalization and residual connections
+- Multiple convolutional layers with varying filter sizes
 
+### Discriminator
+- Multi-scale patch-based discrimination
+- Derivative independence methodology
+- Deep feature extraction capabilities
+- Multiple output scales for better feature learning
 
-High-Resolution Output
+---
 
-Integrates RRDBNet (from ESRGAN) for super-resolution and detail enhancement in output images.
+## Requirements
 
+```bash
+tensorflow>=2.0.0
+torch>=1.7.0
+numpy
+opencv-python
+scikit-learn
+scikit-image
+matplotlib
+```
 
-Multi-scale Discriminator
+---
 
-Leverages a multi-scale PatchGAN architecture for robust feature learning across multiple resolution levels.
+## Dataset
 
+The model uses the CT-to-MRI CGAN dataset from Kaggle. The dataset contains paired MRI and CT scan images for training and testing.
 
-Data Augmentation
+---
 
-Employs augmentation techniques to enhance the diversity and size of the training set.
+## Training
 
+The model was trained for 50,000 epochs with the following parameters:
+- Batch size: 4 (8 after augmentation)
+- Learning rate: 0.0001
+- Weight decay: 6e-8
+- Image size: 256x256x3
 
-Dataset
+---
 
-Modalities: CT and MRI brain scan cross-sections
+## Evaluation Metrics
 
+The model is evaluated using multiple metrics:
+- Binary Cross-Entropy Loss
+- AUC-ROC Score
+- F1-Score
+- Peak Signal-to-Noise Ratio (PSNR)
+- Structural Similarity Index (SSIM)
 
-Preprocessing:
+---
 
-Structured into trainA, trainB, testA, and testB folders
+## Results
 
-Organized for compatibility with standard CycleGAN pipelines
+The model achieves:
+- Good performance in MRI to CT translation
+- Acceptable performance in CT to MRI translation
+- High-quality super-resolution output
+- Preservation of important medical features
 
-Sources: Multiple medical imaging datasets (properly aggregated and anonymized)
+---
 
+## Usage
 
-**Model Architecture**
+1. Clone the repository
+2. Install dependencies
+3. Download the dataset
+4. Run the training script
+5. Use the trained model for inference
 
-**Generator**
+---
 
-Type: U-Net-based encoder-decoder
+## Model Weights
 
-Features:
+The trained model weights are saved in the following format:
+- Generator (MRI to CT): `g_target_weights.h5`
+- Generator (CT to MRI): `g_source_weights.h5`
+- Discriminator (MRI): `d_source_weights.h5`
+- Discriminator (CT): `d_target_weights.h5`
 
-Skip connections for spatial fidelity
+---
 
-Probabilistic latent space (via VAE)
+## Limitations
 
-Group normalization
+- Performance is affected by the limited dataset size
+- CT to MRI translation shows higher loss values
+- Training requires significant computational resources
 
-Residual blocks for deeper feature reuse
+---
 
-**Discriminator**
+## License
 
-Architecture: Multi-scale PatchGAN
+This project is licensed under the MIT License 
 
-Features:
+---
 
-Operates at 4 different scales
+## Author 
 
-Derivative independence methodology to refine gradient flow
+Sunil Kumawat
 
-Focuses on both local and global texture fidelity
-
-
-**Evaluation Metrics & Results**
-
-Metric	Value
-
-BCE Loss (Original vs HR)	0.356623
-
-AUC-ROC Score	0.991677
-
-F1-Score	0.831320
-
-Average PSNR	27.27 dB
-
-Average SSIM	0.891177
-
-**Conclusion**
-
-This project demonstrates the effectiveness of integrating VAE-based probabilistic modeling with adversarial learning for high-resolution, cross-modality medical image translation. The model produces perceptually and quantitatively superior results even with limited training data.
